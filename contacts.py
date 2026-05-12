@@ -1,0 +1,78 @@
+import json
+import sys
+import os
+
+CONTACTS_FILE = "contacts.json"
+
+def load_contacts():
+    """Nolasa kontaktus no JSON faila. Ja fails neeksistē, atgriež tukšu sarakstu."""
+    if not os.path.exists(CONTACTS_FILE):
+        return []
+    try:
+        with open(CONTACTS_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (json.JSONDecodeError, IOError):
+        return []
+
+def save_contacts(contacts):
+    """Saglabā kontaktu sarakstu JSON failā."""
+    with open(CONTACTS_FILE, "w", encoding="utf-8") as f:
+        json.dump(contacts, f, ensure_ascii=False, indent=4)
+
+def add_contact(name, phone):
+    """Pievieno jaunu kontaktu un saglabā."""
+    contacts = load_contacts()
+    contacts.append({"name": name, "phone": phone})
+    save_contacts(contacts)
+    print(f"Kontakts '{name}' pievienots!")
+
+def list_contacts():
+    """Izvada visus kontaktus."""
+    contacts = load_contacts()
+    if not contacts:
+        print("Kontaktu saraksts ir tukšs.")
+        return
+    
+    print("\nVisi kontakti:")
+    for idx, c in enumerate(contacts, 1):
+        print(f"{idx}. {c['name']} - {c['phone']}")
+
+def search_contacts(query):
+    """Meklē kontaktus pēc vārda daļas."""
+    contacts = load_contacts()
+    results = [c for c in contacts if query.lower() in c['name'].lower()]
+    
+    if not results:
+        print(f"Nav atrasts neviens kontakts, kas atbilstu '{query}'.")
+    else:
+        print(f"\nMeklēšanas rezultāti ('{query}'):")
+        for c in results:
+            print(f"- {c['name']}: {c['phone']}")
+
+def main():
+    if len(sys.argv) < 2:
+        print("Lietošana: python contacts.py [add|list|search] [parametri]")
+        return
+
+    command = sys.argv[1].lower()
+
+    if command == "add":
+        if len(sys.argv) == 4:
+            add_contact(sys.argv[2], sys.argv[3])
+        else:
+            print("Kļūda! Lietošana: python contacts.py add 'Vārds' 'Telefons'")
+            
+    elif command == "list":
+        list_contacts()
+        
+    elif command == "search":
+        if len(sys.argv) == 3:
+            search_contacts(sys.argv[2])
+        else:
+            print("Kļūda! Lietošana: python contacts.py search 'vārds'")
+            
+    else:
+        print(f"Nezināma komanda: {command}")
+
+if __name__ == "__main__":
+    main()
