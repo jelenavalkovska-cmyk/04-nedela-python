@@ -1,0 +1,1 @@
+python contacts.py add "Anna Ozoliņa" "+371 26123756"

@@ -19,12 +19,14 @@ def save_contacts(contacts):
     with open(CONTACTS_FILE, "w", encoding="utf-8") as f:
         json.dump(contacts, f, ensure_ascii=False, indent=4)
 
-def add_contact(name, phone):
+def add_contact(kontaktu_saraksts):
     """Pievieno jaunu kontaktu un saglabā."""
-    contacts = load_contacts()
-    contacts.append({"name": name, "phone": phone})
-    save_contacts(contacts)
+    name = input("Ievadiet kontakta vārdu: ")
+    phone = input("Ievadiet kontakta telefona numuru: ")
+    kontaktu_saraksts.append({"name": name, "phone": phone})
+    save_contacts(kont_saraksts)
     print(f"Kontakts '{name}' pievienots!")
+    return True
 
 def list_contacts():
     """Izvada visus kontaktus."""
@@ -49,30 +51,13 @@ def search_contacts(query):
         for c in results:
             print(f"- {c['name']}: {c['phone']}")
 
-def main():
-    if len(sys.argv) < 2:
-        print("Lietošana: python contacts.py [add|list|search] [parametri]")
-        return
-
-    command = sys.argv[1].lower()
-
-    if command == "add":
-        if len(sys.argv) == 4:
-            add_contact(sys.argv[2], sys.argv[3])
-        else:
-            print("Kļūda! Lietošana: python contacts.py add 'Vārds' 'Telefons'")
-            
-    elif command == "list":
-        list_contacts()
-        
-    elif command == "search":
-        if len(sys.argv) == 3:
-            search_contacts(sys.argv[2])
-        else:
-            print("Kļūda! Lietošana: python contacts.py search 'vārds'")
-            
-    else:
-        print(f"Nezināma komanda: {command}")
 
 if __name__ == "__main__":
-    main()
+    kont_saraksts = load_contacts()
+    add_contact(kont_saraksts)
+    save_contacts(kont_saraksts)
+    list_contacts()
+    search_contacts("Anna")
+
+
+
