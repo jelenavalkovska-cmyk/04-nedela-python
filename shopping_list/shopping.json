@@ -1,0 +1,22 @@
+[
+     {
+          "name": "ābols",
+          "qty": 5,
+          "price": 4.13
+     },
+     {
+          "name": "banāni",
+          "qty": 10,
+          "price": 1.65
+     },
+     {
+          "name": "banāni",
+          "qty": 10,
+          "price": 1.65
+     },
+     {
+          "name": "tomāti",
+          "qty": 15,
+          "price": 5.0
+     }
+]
